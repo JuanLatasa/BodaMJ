@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesas de la Boda</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fdf6f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b4c3b;
+        }
+        .search-container {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #d3c0b0;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .results {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 10px;
+        }
+        .result-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <div style="text-align: center; margin: 20px 0;">
+    <img src="MartayJuan.jpg" alt="Marta y Juan" 
+        style="width: 90%; max-width: 400px; height: auto; border-radius: 20px; box-shadow: 0 0 30px rgba(0,0,0,0.2);">
+    </div>
+
+    <h1>Busca tu mesa</h1>
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="Escribe tu nombre...">
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        const guestTableMap = {'Juan Antonio Latasa Reinoso': '1', 'Alfredo Meneses Vadillo': '1', 'Alfredo Meneses Muñoz': '1', 'Ana Meneses Muñoz': '1', 'Nicolás María Latasa Reinoso': '1', 'Francisco López Martín': '1', 'LucÍa Rivera Sánchez': '1', 'Juan Antonio Latasa Vassallo': '1', 'Rosario Muñoz Lora': '1', 'Patircia Reinoso Barbero': '1', 'Pablo Fraga': '1', 'Fernando Latasa Reinoso': '1', 'Maria Isabel Latasa Reinoso': '1', 'Marina del Pilar Latasa Reinoso': '1', 'María Luisa Latasa Reinoso': '1', 'María de la Almudena Latasa Reinoso': '1', 'Miguel María Latasa Reinoso': '1', 'Patricia Latasa Reinoso': '1', 'Marta Meneses Muñoz': '1', 'Abuela Maria Luisa Barbero Morales': '1', 'Ana Morales Trichet': '10', 'Paula Vargas Rodríguez de Molina': '10', 'Rocío Pardo Pérez': '10', 'María Romera Soto': '10', 'Belén Cabezón Torrado': '10', 'Luis Montero Mejias': '10', 'Álvaro Bedate Sánchez': '10', 'Alejandro Expósito Valiñas': '10', 'José Mato García': '10', 'Luis Enrique Ros Yepes': '11', 'Pedro Cadahía Sánchez-Ramade': '11', 'Jaime Nieto Casado': '11', 'Paula Martín Sánchez': '11', 'Manuela Ochoa Gómez-Acebo': '11', 'Borja Elejalde Bilbao': '11', 'Irene Leal Rico': '11', 'Nicolás González-Tarrío Cañero': '11', 'Jaime Osorio Romero de Ávila': '11', 'Beatriz Campos López de Azcona': '11', 'Alejandro Hernández Caruana': '11', 'Roberto Rosales de Salamanca Romero': '12', 'Juan Paez García-Verde': '12', 'Juan de Lora Ybarra': '12', 'Marta García Molina': '12', 'Miguel Ybarra Abaurrea': '12', 'Cristóbal Montes Moreno': '12', 'Manuel Rodríguez de la Puerta': '12', 'Fabiola Porres Sangran': '12', 'Luisa Ortuzar Palomino': '12', 'Elena Cheney del Río': '12', 'Almudena Sánchez Molina': '12', 'Gonzalo Guillén Benjumea': '13', 'María Dolores Sánchez Marín': '13', 'Blanca Borras Marcos': '13', 'Luis Castillo Cano Cortés': '13', 'Antonio Muñoz Muñoz': '13', 'Alexandra Limburg': '13', 'Alejandro Ferreras Carreras': '13', 'Rosa Soler Escobar': '13', 'Miguel Guillén Vallejo': '13', 'Nuria González-Áleman Calleja': '13', 'Pedro Rodero Rodríguez': '13', 'Francisco Luis Briz Venegas': '14', 'María Enrile Benítez': '14', 'Sandra Venegas Mejías': '14', 'Javier Fernández Delgado': '14', 'Eva Albert Macías': '14', 'María del Patrocinio Martín Ruiz': '14', 'Rosario Martínez Manchón': '14', 'Inmaculada Millares-Blanco Oliva': '14', 'Jose Enrique Álvarez Díaz': '14', 'Manuel Enrile Benítez': '14', 'Jose Ignacio Morales Conde': '14', 'Jose Manuel Sobrino Alonso': '14', 'Esther Torrejón Santos': '15', 'Jesús Gutiérrez Márquez': '15', 'Sonsoles Santurino Durán': '15', 'Ana Rebollo Pérez': '15', 'Manuel Serrano Cantalapiedra': '15', 'Pablo Peinado Rodríguez': '15', 'Cristina Galbarro Gutiérrez': '15', 'Juan Antonio Zambrano  Almero': '15', 'Olga de Castro Ruiz': '15', 'Silvia Gutiérrez Márquez': '15', 'Jesús del Valle Quesada': '15', 'Luis Millán Arcauce': '15', 'Pablo Fernández Duque': '16', 'Eider Hernandez Martín': '16', 'María Ortega Cantos': '16', 'Pablo Orduña Méndez': '16', 'María Palos Pereira': '16', 'Daniel Cid Moreno': '16', 'Francesco Cifani Sáez': '16', 'Pedro Páramo Soto': '16', 'Lucía González Hernández': '16', 'Maria Rodriguez-Conde de Diego': '16', 'Ángela Charlo Millán': '17', 'Santiago Rodríguez Maisterra': '17', 'Nuria Cristóbal Sánchez': '17', 'Álvaro Sanz de Ojeda y Ruiz de Luna': '17', 'Álvaro García Aznar': '17', 'Quique Sánchez de León': '17', 'Paloma Armada Gamboa': '17', 'Belén Albareda Úbeda': '17', 'Álvaro Luis Reinoso Lozano': '17', 'Jose María Sevilla Rodríguez': '17', 'Maria de los Angeles de Andrés Laguillo': '18', 'Rocío Ayuso Soto': '18', 'Alejandro Perez de Tudela Jimeno': '18', 'Matilde Diez de Rivera de Solís': '18', 'Ana san Juan': '18', 'Jose Javier Mateos Pérez': '18', 'José María Zaldívar Vericat': '18', 'Iñigo Bilbao-Goyoaga Basterrechea': '18', 'Inmaculada Sanchez de Miguel': '18', 'Darío González-Campos Gómez': '18', 'Javier Corrales Camacho': '18', 'Macarena Ocete Entrala': '19', 'Alejandro Roldán Ortiz': '19', 'Carmen Romero Pascual de Zulueta': '19', 'José María Navarro Torres': '19', 'Pablo Chacón Gutiérrez': '19', 'Marta Ibáñez Rubio': '19', 'Cristina Ilarduya Gandarias': '19', 'Jaime  Reinoso Martinez': '19', 'Lizbeth Rodríguez Merino': '19', 'Ignacio Roldán Ortiz': '19', 'María Pallás Corraliza': '19', 'Pedro Benavent Viñuelas': '2', 'Rocío Laffón Molina': '2', 'Carlos Medina Gutiérrez': '2', 'Fernando Ruiz Contreras': '2', 'Reyes Bonet Torres': '2', 'Inés García Ruiz': '2', 'Guadalupe Moreno Romero': '2', 'Álvaro Domecq Serrano-Suñer': '2', 'Marta Ezcurra Cólogan': '2', 'Iñigo Pommarez Gutiérrez': '2', 'Victoria de Marichalar de Borbón': '2', 'Juana Llorente Muriel': '2', 'Alvaro Muñoz Marchena': '20', 'Caroline Bruggeman-Muñoz': '20', 'Ana Escalante Lora': '20', 'Rosa Muñoz Loza': '20', 'Cayetana Muñoz Márquez': '20', 'Maria Muñoz Loza': '20', 'Felipe Pou Cox': '20', 'Victoria Muñoz Loza': '20', 'Isabel Muñoz Márquez': '20', 'Celia Muñoz Marchena': '20', 'Bárbara Bermúdez Moreno': '20', 'Alba Muñoz Álvarez': '20', 'Julia Moreno Campos': '21', 'Concepción Romero Fructos-Vázquez': '21', 'Patricio Escalante Marín': '21', 'Rosario Vázquez Rosso': '21', 'Manuel Lora Chaves': '21', 'Rosario Lora Vázquez': '21', 'Manuel Lora Vázquez': '21', 'Miguel Lora Vázquez': '21', 'Jose Miguel Muñoz Lora': '22', 'Jesus Muñoz Lora': '22', 'Pilar Meneses Vadillo': '22', 'Mayte Álvarez Noriega': '22', 'Manolita Chaves Chaves': '22', 'Alberto Muñoz Lora': '22', 'M Jose Rioja Chaves': '22', 'Manuel Morales Flor': '22', 'Isabel Márquez Escudero': '22', 'Rosa Loza Vázquez': '22', 'Rosario Lora Chaves': '22', 'Mayte Noriega Sanchís': '22', 'Guillermo Elena Suarez': '23', 'Miguel Angel Latasa Vassallo': '23', 'Pablo Latasa Vassallo': '23', 'Pepo Latasa Vassallo': '23', 'Maite Latasa Errecart': '23', 'Mónica FERNANDEZ - LAYOS': '23', 'Cristina Pérez': '23', 'Miriam Alía': '23', 'Marta Perez-Santana': '23', 'Javier Latasa Vassallo': '23', 'Moncho Aguinaga': '24', 'Amparo Vassallo Rubio': '24', 'Susana Motilla': '24', 'Maria Pilar Latasa Vassallo': '24', 'Josemari Latasa Vassallo': '24', 'Belen Latasa Vassallo': '24', 'Miguel Gil': '24', 'Miguel Maria Latasa Alzuri': '24', 'Luis Latasa Vassallo': '24', 'Rocio Latasa Vassallo': '24', 'Maria Latasa Perez-Santana': '25', 'Ignacio García Gutiérrez De Terán': '25', 'Marta Latasa Perez-Santana': '25', 'Maria Latasa Pérez': '25', 'Alejandro López de Carrizosa': '25', 'Alonso Hazas Fernández-Cid': '25', 'Laura Latasa Pérez': '25', 'Yago Latasa Motilla': '26', 'Jaime Aguinaga Latasa': '26', 'Ignacio Latasa Motilla': '26', 'Lucia Aguinaga Latasa': '26', 'Javier Latasa Motilla': '26', 'Paloma Latasa Perez-Santana': '26', 'Rocío Aguinaga Latasa': '26', 'Alvaro Aguinaga Latasa': '26', 'Luis Latasa Motilla': '26', 'Fermin Latasa Motilla': '26', 'Pedro Latasa Alía': '27', 'Miguel  Gil Latasa': '27', 'Pablo Gil Latasa': '27', 'Miriam Latasa Alía': '27', 'Belen Aguinaga Latasa': '27', 'Diego Latasa Alía': '27', 'Joaquín Gil Latasa': '27', 'Juan Aguinaga Latasa': '27', 'Martin Latasa Alía': '27', 'Rocío  Gil Latasa': '27', 'Tia Isabel Reinoso Barbero': '28', 'José Luis Amat': '28', 'Carmen Olmo Lara': '28', 'Maria Rosa Reinoso Barbero': '28', 'Maria Luisa Martinez': '28', 'Fernando Reinoso Barbero': '28', 'Raul Ruiz Guerrero': '28', 'Ana Dominguez': '29', 'Marta Reinoso Barbero': '29', 'Alvarito Garcia Reinoso': '29', 'Julian García': '29', 'Ernesto Gómez': '29', 'Manolo de Moya': '29', 'Lourdes Reinoso Barbero': '29', 'Luis Reinoso Barbero': '29', 'Laura Reinoso Barbero': '29', 'Lucía Álvarez del Manzano Renard': '3', 'Flavia Dodero de Rojas': '3', 'Iñigo Urrutia Parages': '3', 'Juan Bellón Ruiz': '3', 'Iñigo González Yagüe': '3', 'Ignacio González Valoria': '3', 'Gonzalo Elizondo Rotondo': '3', 'Blanca Herreros de Tejada Lobo': '3', 'Roberto Navidades Pedraza': '3', 'Esther Cansado Romera': '3', 'Martina Dodero de Rojas': '3', 'Lucía Loscertales Camacho': '3', 'Margarita Álvarez': '30', 'Gonzalo Sanchez-Bordona': '30', 'Demetrio Cobos': '30', 'David España': '30', 'Pablo Reinoso Lozano': '30', 'José Luis Amat Reinoso': '30', 'Maria Rosa Amat Reinoso': '30', 'Fernando Reinoso Martinez': '30', 'Maria Luisa Reinoso Martinez': '30', 'Lauri Garcia Reinoso': '30', 'Carmen pardo de santayana': '30', 'Fernando Gutierrez Luque': '31', 'Lucia Reinoso Lozano': '31', 'Nacho Garcia luengo': '31', 'Almudena Reinoso Lozano': '31', 'Marta Gomez Reinoso': '31', 'Carmen Reinoso Lozano': '31', 'Jesús Sanchez Jauregui': '31', '\u2060Jaime Rubio': '31', 'Lourdes de Moya Reinoso': '32', 'Pati Garcia Reinoso': '32', 'Ines Garcia Reinoso': '32', 'Maria de Moya Reinoso': '32', 'Julianillo Garcia Reinoso': '32', 'Pablo Aguinaga Latasa': '32', 'Ernestillo Gomez Reinoso': '32', 'Jimena Gomez Reinoso': '32', 'Miriam Latasa Motilla': '32', 'Juanpi Gomez Reinoso': '33', 'Isa de Moya Reinoso': '33', 'Telmo Latasa': '33', 'Ana Reinoso Dominguez': '33', 'Miguel Aguinaga Latasa': '33', 'Javier Aguinaga Latasa': '33', 'Paloma Reinoso Lozano': '33', 'Ana Latasa Perez-Santana': '33', 'Gabriela Latasa Motilla': '33', 'Demetrio Cobos Reinoso': '34', 'Marta Garcia Reinoso': '34', 'Paula Reinoso Dominguez': '34', 'Blanca Garcia Reinoso': '34', 'Mencia Reinoso Dominguez': '34', 'Maria Reinoso Dominguez': '34', 'Sofía Macías Fuentes': '4', 'Jimena Martínez Díaz': '4', 'Jorge Ojeda López de Uralde': '4', 'Elena Garrido Campos': '4', 'Carlos Ituiño García': '4', 'Luis Ojeda Ruiz-Mateos': '4', 'Blanca Herrero Humet': '4', 'Juan Madurga Navarro': '4', 'Beatriz Domecq Vergara': '4', 'Carlos Pérez Martín-Caro': '4', 'Inés Clavero Guajardo-Fajardo': '5', 'Gonzalo Soto Pérez de Azpillaga': '5', 'Rafael Garrido Martín': '5', 'Carlos Báñez Martínez': '5', 'Isabel de los Ríos Mouvet': '5', 'Javier Fernández Pérez-Ricarte': '5', 'Miriam de Vicente Rodríguez': '5', 'Julio Endika Eguino': '5', 'María Soler Delgado': '5', 'Alejandra Lanzas Salido': '5', 'Leticia Román Bernal': '5', 'Macarena Valdivia Villegas': '5', 'Juan Antonio Porras de Sola': '6', 'Martina Subirá Puente': '6', 'Delia de Erauso Lasarte': '6', 'Lourdes de León Lucio-Villegas': '6', 'Gadara Hamparzoumian Asuero': '6', 'Victoria Nieuwenhuys Ruiz': '6', 'Íñigo Bandrés': '6', '???????': '6', 'Luis María Langer Pinto-Barreiros': '6', 'Vicente Conde Pardavila': '6', 'Alberto Gozalo Ruiz': '6', 'Pedro Latasa Fernandez-Layos': '7', 'Marta Fernández del Castillo Díaz': '7', 'Rocío Molina Torres': '7', 'Lola Barquín Madariaga': '7', 'Javi Latasa Fernandez-Layos': '7', 'Rosa Calero Joly': '7', 'Miguel Latasa Perez-Santana': '7', 'Mercedes del Barrio Núñez': '7', 'Javi Latasa Perez-Santana': '7', 'Gonzalo Latasa Fernandez-Layos': '7', 'Ángela Gonzalo González': '7', 'Javier Sancho del Río': '7', 'Luis Rojas Jiménez': '8', 'PosibilidadMover a luis a las 10': '8', 'Rafael Olleros Guerrero': '8', 'Inés Blanco de la Puerta': '8', 'Claudia García-Blanca Guardiola': '8', 'Juan Vázquez Lorenzo': '8', 'Juan Pablo de la Cuerda Rubio': '8', 'Koki del Pino Dávila': '8', 'Diego Bootello': '8', 'Josefina Hernández-Gil': '8', 'Javier de la Cuerda Rubio': '8', 'Carmen Romera Soto': '8', 'Ana Botija Barahona': '8', 'Beatriz Capote Ochoa de Retana': '9', 'Rodrigo Fernández Ostos': '9', 'Iñigo García de Polavieja': '9', 'Inés Pérez-Luna Bonet': '9', 'Carmen Ybarra Rodríguez': '9', 'Jaime Sebastián de Erice': '9', 'Ibert Cirera Tirschtigel': '9', 'Carlos Lijó Clemente': '9', 'Gonzalo Carrillo Alonso': '9', 'Jaime Rodríguez Martínez de Salinas': '9', 'Concepción Caja Aguero': 'Column1', 'Rocío Molina Montes': 'Column1', 'Jose Antonio Ondiviela': 'Column1', 'Marta González Peral': 'Column1', 'Jose María Rosado': 'Column1', 'Laura Martín Vidal': 'Column1', 'Claudia Guardiola Osborne': 'Column1', 'María Cólogan Osborne': 'Column1', 'Ana (Jose María)': 'Column1', 'Inmaculada Millán Arcauce': 'Column1', 'José María Corella Aznar': 'Column1', 'Nuria Salido Castillo': 'Column1', 'Alejandro López Galán': 'Column1', 'Manuel Laffón Parias': 'Column1', 'Fernando Coloma': 'Column1'};
+
+        const searchBox = document.getElementById('searchBox');
+        const resultsDiv = document.getElementById('results');
+
+        searchBox.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            resultsDiv.innerHTML = '';
+
+            if (query.length === 0) return;
+
+            const matches = Object.keys(guestTableMap).filter(name =>
+                name.toLowerCase().includes(query)
+            );
+
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div class="result-item">No se encontraron coincidencias.</div>';
+            } else {
+                matches.forEach(name => {
+                    const table = guestTableMap[name];
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.textContent = `${name} → Mesa: ${table}`;
+                    resultsDiv.appendChild(div);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
